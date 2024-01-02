@@ -1,6 +1,9 @@
 # OS files
 .DS_Store
+
+# Tool files
 .vscode/
+*.bak
 
 # Project files
 micropython/

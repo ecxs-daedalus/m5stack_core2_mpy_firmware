@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- M5Stack Core2 Board configuration
 - Preview Container configuration
 - Tooling scripts
 - Project description
