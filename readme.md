@@ -37,6 +37,8 @@ Besides the directory overlay, the tool-chain is installed as described in:
 - [micropython: esp32 port](https://github.com/micropython/micropython/tree/master/ports/esp32)
 
 
+### For Windows (WSL users)
+
 The USB-connection can be forwarded to wsl via
 [connect-usb](https://learn.microsoft.com/en-us/windows/wsl/connect-usb) and
 the commands (VID:PID = 1a86:55d4 for Core2):
