@@ -1,5 +1,8 @@
 # OS files
 .DS_Store
+.vscode/
 
 # Project files
+micropython/
+merged/
 output/

@@ -1,18 +1,19 @@
 #!/bin/bash
 
-HOST_PRJ_DIR="$( cd "$( dirname ${BASH_SOURCE[0]} )/../.." && pwd )"
+HOST_PRJ_PATH="$( cd "$( dirname ${BASH_SOURCE[0]} )/../.." && pwd )"
 CLIENT_HOME="/root"
 
 mkdir -p \
-    "${HOST_PRJ_DIR}/output/build" \
-    "${HOST_PRJ_DIR}/output/workdir"
+    "${HOME}/micropython" \
+    "${HOME}/src" \
+    "${HOME}/output"
 
 podman run \
-    --volume "${HOST_PRJ_DIR}/micropython:${CLIENT_HOME}/micropython" \
-    --volume "${HOST_PRJ_DIR}/src:${CLIENT_HOME}/src" \
-    --volume "${HOST_PRJ_DIR}/output:${CLIENT_HOME}/output" \
+    --volume "${HOST_PRJ_PATH}/micropython:${CLIENT_HOME}/micropython" \
+    --volume "${HOST_PRJ_PATH}/src:${CLIENT_HOME}/src" \
+    --volume "${HOST_PRJ_PATH}/output:${CLIENT_HOME}/output" \
+    --privileged \
     --interactive \
     --tty \
-    --entrypoint /bin/bash \
-    --privileged \
-    root-make
+    mpy-build-env \
+    "$@"

@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu AS base
+FROM docker.io/library/ubuntu
 ENV HOME /root
 RUN apt-get update
 RUN apt-get install -y \
@@ -17,6 +17,7 @@ RUN apt-get install -y \
         libssl-dev \
         dfu-util \
         libusb-1.0-0 \
+        unionfs-fuse \
         tree
 RUN git clone -b v5.1.2 --recursive https://github.com/espressif/esp-idf.git "${HOME}/esp-idf"
 RUN ${HOME}/esp-idf/install.sh
@@ -25,14 +26,6 @@ RUN mkdir -p \
     "${HOME}/src" \
     "${HOME}/output" \
     "${HOME}/merged"
-COPY --chmod=0777 "mount-setup.sh" "${HOME}/"
-
-FROM base AS root-make
-WORKDIR /root
-COPY --chmod=0777 "entrypoint-root-make.sh" "./"
-ENTRYPOINT ["./entrypoint-root-make.sh"]
-
-FROM base AS esp32-make
-WORKDIR /root
-COPY --chmod=0777 "entrypoint-esp32-make.sh" "./"
-ENTRYPOINT ["./entrypoint-esp32-make.sh"]
+COPY --chmod=0777 "entrypoint.sh" "${HOME}/"
+WORKDIR "${HOME}"
+ENTRYPOINT ["./entrypoint.sh"]

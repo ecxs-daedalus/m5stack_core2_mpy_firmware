@@ -6,48 +6,50 @@ board.
 
 ## Structure
 
-The official micropython repository is used as a submodule with all
-modifications and extentions going to `src/`. The actual tooling is setup within
-a container (See `tools/`). In the actual build process the folders
-`micropython/`, `src/`, `output/` are overlayed within the container so that all results are stored within `output/build/`.
+The official micropython repository needs to be cloned inside the repository
+(Not as a submodule, as the esp-idf toolchain the `.git` folder inside the
+repository expects). All modifications and extentions are going to `src/`.
+In the actual build process the folders `micropython/`, `src/`, `output/` are
+overlayed with overlayfs-fuse so that all results are stored within
+`output/`.
 
 - `micropython/`: Micropython repository
                   (lower/read layer for container overlay)
 - `src/`        : Modification to micropython sources
                   (middle/read layer for container overlay)
-- `output/`
-    - `build/`  : Output directory for builds
+- `output/`     : Output directory for builds
                   (upper/write layer for container overlay)
-    - `workdir/`: Support folder for overlay (should be empty)
+- `merged/`     : Mount point for the overlayed directories
 - `tools/`      : Scripts and toolchain configurations
-
 
 ## Requirements
 
-For the container toolchain [podman](https://podman.io/docs/installation) needs to be installed.
-
-Once podman is available, the required containers can be build with
+To install and setup all necessary packets and repositories, the script:
 
 ```bash
-./tools/container/build.sh
+./tools/setup.sh
 ```
 
-## Usage
-
-Besides the directory overlery, the containers are setup with the toolchain desciped in:
+can be used. Besides the directory overlay, the toolchain desciped in:
 
 - [espressif: get-started](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/linux-macos-setup.html)
 - [micropython: esp32 port](https://github.com/micropython/micropython/tree/master/ports/esp32)
 
-To run make in the root directory within the container, use:
+are installed. The Overlay can be recreated by providing the script with the
+setup-step number:
 
 ```bash
-./tools/root-make.sh ARGUMENTS
+./tools/setup.sh 5 # STEP 5: Setup Overlay
 ```
-and in the esp32 port directory, use:
 
-```bash
-./tools/esp32-make.sh ARGUMENTS
+The usb-connection can be forwarded to wsl via
+[connect-usb](https://learn.microsoft.com/en-us/windows/wsl/connect-usb) and
+the commands (VID:PID = 1a86:55d4 for Core2):
+
+```sh
+usbipd list
+usbipd bind --hardware-id 1a86:55d4
+usbipd attach --wsl --hardware-id 1a86:55d4
 ```
 
 ## License
